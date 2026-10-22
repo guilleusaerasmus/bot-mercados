@@ -131,6 +131,17 @@ Decisiones de diseño:
 La primera vez que se usa el RAG se descarga el modelo de embeddings (~220 MB) en
 `~/.bot-mercados/modelos`.
 
+## Despliegue 24/7
+
+En un servidor Ubuntu (por ejemplo, Oracle Cloud *Always Free*):
+```bash
+curl -fsSL https://raw.githubusercontent.com/guilleusaerasmus/bot-mercados/main/deploy/instalar.sh -o instalar.sh
+bash instalar.sh        # instala, crea el servicio systemd y la copia de seguridad diaria
+# copia tu .env a ~/bot-mercados/.env y: sudo systemctl restart bot-mercados
+```
+El bot solo usa conexiones salientes (no hay que abrir puertos). Solo puede haber **una**
+instancia conectada a Telegram a la vez: para el bot del PC antes de arrancar el del servidor.
+
 ## Monetización
 
 Ver [docs/MONETIZACION.md](docs/MONETIZACION.md): modelo freemium con Telegram Stars, costes por
