@@ -246,7 +246,10 @@ def test_anuncio_respeta_bajas_y_bloqueos(bot, monkeypatch):
     assert bot.db.announcement_chats() == [1]  # el que bloqueó deja de recibirlos
 
 
-def test_aviso_de_errores_al_admin_limitado(bot):
+def test_aviso_de_errores_al_admin_limitado(bot, monkeypatch):
+    from bot_mercados import telegram_bot
+    # Como en un servidor recién encendido: el reloj monotónico vale pocos segundos.
+    monkeypatch.setattr(telegram_bot.time, "monotonic", lambda: 12.0)
     context = SimpleNamespace(bot=FakeBot(), error=RuntimeError("fallo raro"))
     asyncio.run(bot.on_error(None, context))
     asyncio.run(bot.on_error(None, context))

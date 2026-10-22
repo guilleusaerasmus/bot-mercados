@@ -116,7 +116,9 @@ class MarketBot:
         self.sec = sec
         self.plans = Plans(db, config.admin_user_ids)
         self._recent: dict[int, deque] = defaultdict(deque)
-        self._last_error_notice = 0.0
+        # None = aún no se ha avisado. No vale 0.0: monotonic() cuenta desde el arranque de la máquina y en un
+        # servidor recién encendido valdría menos de 5 minutos, así que nunca se avisaría.
+        self._last_error_notice: float | None = None
 
     # --- utilidades ---------------------------------------------------------------------
 
@@ -910,7 +912,8 @@ class MarketBot:
     async def on_error(self, update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
         log.error("Error procesando una actualización", exc_info=context.error)
         now = time.monotonic()
-        if not self.config.admin_user_ids or now - self._last_error_notice < ERROR_NOTICE_SECONDS:
+        last = self._last_error_notice
+        if not self.config.admin_user_ids or (last is not None and now - last < ERROR_NOTICE_SECONDS):
             return
         self._last_error_notice = now
         text = f"⚠️ Error en el bot: {type(context.error).__name__}: {str(context.error)[:300]}\nDetalles en el registro."
