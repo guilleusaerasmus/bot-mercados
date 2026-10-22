@@ -1,0 +1,8 @@
+openai==3.36.1
+python-telegram-bot[job-queue]==22.8
+yfinance==1.7.0
+matplotlib==3.11.2
+python-dotenv==1.2.4
+fastembed==0.9.0
+pypdf==6.21.2
+pytest==9.1.1

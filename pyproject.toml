@@ -1,0 +1,9 @@
+[project]
+name = "bot-mercados"
+version = "0.1.0"
+description = "Bot de Telegram de mercados financieros con IA (Groq/Grok) y tool calling"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
